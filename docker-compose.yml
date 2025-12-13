@@ -1,0 +1,23 @@
+services:
+  web:
+    image: lovasoa/sqlpage:main 
+    build:
+      context: "../.."
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www
+      - ./sqlpage:/etc/sqlpage
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://root:secret@db/sqlpage
+  db: 
+    ports:
+      - "5432:5432"
+      - "3306:3306"
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: sqlpage
+      POSTGRES_PASSWORD: secret
