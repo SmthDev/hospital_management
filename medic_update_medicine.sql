@@ -1,3 +1,4 @@
+
 SET username = (SELECT username FROM login_session WHERE id = sqlpage.cookie('session'));
 
 SELECT 'redirect' AS component,
@@ -12,19 +13,21 @@ SELECT 'redirect' AS component,
         'main_page.sql' AS link
 WHERE $user_role != 'medic' AND $user_role != 'admin';
 
+SET medicine_id = :id;
+SET medicine_name = :name;
+SET medicine_category = :category;
+SET medicine_description = NULLIF(:description, '');
+
+
 SELECT 'redirect' AS component,
        'medic_medicines.sql?error=missing_id' AS link
-WHERE COALESCE(:id, '') = '';
+WHERE $medicine_id IS NULL OR $medicine_id = '';
 
 UPDATE medicines
-SET name = :name,
-    category = :category,
-    description = NULLIF(:description, '')
-WHERE id = CAST(:id AS INTEGER);
+SET name = $medicine_name,
+    category = $medicine_category,
+    description = $medicine_description
+WHERE id = $medicine_id::int;
 
 SELECT 'redirect' AS component,
-       CASE 
-           WHEN changes() > 0 THEN 'medic_medicines.sql?success=updated'
-           ELSE 'medic_medicines.sql?error=update_failed'
-       END AS link;
-
+       'medic_medicines.sql?success=updated' AS link;

@@ -15,9 +15,13 @@ WHERE $user_role != 'medic' AND $user_role != 'admin';
 
 SET medicine_id = :id;
 
-SET medicine_name = (SELECT name FROM medicines WHERE id = CAST(:id AS INTEGER));
-SET medicine_category = (SELECT category FROM medicines WHERE id = CAST(:id AS INTEGER));
-SET medicine_description = (SELECT description FROM medicines WHERE id = CAST(:id AS INTEGER));
+SET medicine_name = (SELECT name FROM medicines WHERE id = CAST($medicine_id AS INTEGER));
+SET medicine_category = (SELECT category FROM medicines WHERE id = CAST($medicine_id AS INTEGER));
+SET medicine_description = (SELECT description FROM medicines WHERE id = CAST($medicine_id AS INTEGER));
+
+SELECT 'redirect' AS component,
+       'medic_medicines.sql?error=missing_id' AS link
+WHERE $medicine_name IS NULL;
 
 
 SELECT 'shell' AS component, 
@@ -40,7 +44,7 @@ SELECT 'form' AS component,
 
 SELECT 'id' AS name,
        'hidden' AS type,
-       :id AS value;
+       $medicine_id::int AS value;
 
 SELECT 'name' AS name,
        'Название препарата' AS label,

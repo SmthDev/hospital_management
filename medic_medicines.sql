@@ -53,6 +53,7 @@ SELECT 'alert' AS component,
        'Ошибка: отсутствует ID препарата' AS title
 WHERE :error = 'missing_id';
 
+
 SELECT 'button' AS component,
        'center' AS justify;
 SELECT 'Добавить препарат' AS title,
@@ -73,7 +74,6 @@ SELECT
     m.description AS "Описание",
     (SELECT COUNT(*) FROM medic_prescriptions WHERE medicine_id = m.id) AS "Назначений",
     '[
-        {"link": "medic_edit_medicine.sql?id=' || m.id || '", "icon": "edit", "color": "blue", "title": "Изменить"},
         {"link": "medic_delete_medicine.sql?id=' || m.id || '", "icon": "trash", "color": "red", "title": "Удалить"}
     ]' AS _sqlpage_actions
 FROM medicines m

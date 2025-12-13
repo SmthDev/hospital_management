@@ -73,8 +73,8 @@ SELECT
     mp.start_date AS "Дата начала",
     mp.end_date AS "Дата окончания",
     CASE 
-        WHEN mp.end_date IS NULL OR mp.end_date >= CURRENT_DATE THE Активно'
-        ELSE ' Завершено'
+        WHEN mp.end_date IS NULL OR mp.end_date >= CURRENT_DATE THEN 'Активно'
+        ELSE 'Завершено'
     END AS "Статус",
     mp.medic_username AS "Назначил",
     '[
