@@ -107,7 +107,27 @@ SELECT 'table' AS component,
 SELECT u.username AS "Логин", r.name AS "Роль"
 FROM user_info AS u
 LEFT JOIN roles r ON u.role_id = r.id
-ORDER BY u.username
+ORDER BY u.username;
+
+-- Логи системы
+SELECT 'title' AS component,
+       'Логи системы' AS contents,
+       3 AS level;
+
+SELECT 'table' AS component,
+       'История действий' AS title,
+       TRUE AS sort,
+       TRUE AS search;
+
+SELECT 
+    id AS "ID",
+    to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') AS "Время",
+    action AS "Действие",
+    table_name AS "Таблица",
+    data::text AS "Данные (JSON)"
+FROM logs
+ORDER BY created_at DESC
+LIMIT 100
 
 
 
